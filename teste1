@@ -1,0 +1,42 @@
+import requests
+
+# URL da API do GitHub
+GITHUB_API_URL = "https://api.github.com"
+# Repositório onde você quer criar a issue (no formato 'usuario/repositorio')
+REPO = "seu_usuario/seu_repositorio"
+# Token de autenticação do GitHub (você pode gerar um token de acesso pessoal no GitHub)
+GITHUB_TOKEN = "seu_token_aqui"
+
+# Função para criar uma nova issue no GitHub
+def create_github_issue(title, body=None, assignees=None, labels=None):
+    url = f"{GITHUB_API_URL}/repos/{REPO}/issues"
+    
+    # Cabeçalhos com autenticação
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+    
+    # Dados da issue
+    issue_data = {
+        "title": title,
+        "body": body,
+        "assignees": assignees,
+        "labels": labels
+    }
+
+    # Fazendo a requisição POST para criar a issue
+    response = requests.post(url, json=issue_data, headers=headers)
+
+    if response.status_code == 201:
+        print(f"Issue criada com sucesso: {response.json()['html_url']}")
+    else:
+        print(f"Falha ao criar a issue: {response.status_code}, {response.text}")
+
+# Exemplo de uso
+create_github_issue(
+    title="Tarefa de teste Unito", 
+    body="Essa issue foi criada para testar a automação com o Unito.", 
+    assignees=["seu_usuario"], 
+    labels=["teste"]
+)
